@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+
+outputs/modelos/
+outputs/metricas/
+
+.ipynb_checkpoints/
+
+.DS_Store
