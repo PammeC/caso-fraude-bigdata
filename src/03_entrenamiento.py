@@ -21,21 +21,14 @@ from sklearn.metrics import (
     precision_score
 )
 
-
 # 1. CARGAR DATASET
 df = pd.read_csv("data/transacciones_fraude_bigdata.csv")
 
-
 # 2. DEFINIR X e y
-
-
 X = df.drop(columns=["fraud", "transaction_id"])
 y = df["fraud"]
 
-
 # 3. TRAIN / TEST SPLIT 80/20
-
-
 X_train, X_test, y_train, y_test = train_test_split(
     X,
     y,
@@ -44,10 +37,7 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-
 # 4. COLUMNAS NUMÉRICAS Y CATEGÓRICAS
-
-
 num_cols = [
     "transaction_amount_usd",
     "transaction_hour",
@@ -67,19 +57,13 @@ cat_cols = [
     "country"
 ]
 
-
 # 5. PREPROCESAMIENTO
-
-
 preprocessor = ColumnTransformer([
     ("num", StandardScaler(), num_cols),
     ("cat", OneHotEncoder(handle_unknown="ignore"), cat_cols)
 ])
 
-
 # 6. DEFINIR MODELOS
-
-
 scale = (y_train == 0).sum() / (y_train == 1).sum()
 print(f"\nRatio de desbalance: {scale:.1f}x")
 
@@ -114,10 +98,7 @@ modelos = {
     )
 }
 
-
 # 7. VALIDACIÓN CRUZADA ESTRATIFICADA
-
-
 cv = StratifiedKFold(
     n_splits=5,
     shuffle=True,
@@ -181,17 +162,12 @@ for nombre, modelo in modelos.items():
 
 
 # 8. TABLA DE RESULTADOS
-
-
 resultados_df = pd.DataFrame(resultados_cv).T.round(4)
 
 print("\nTABLA RESUMEN:")
 print(resultados_df.sort_values(by="AUC-PR", ascending=False))
 
-
 # 9. SELECCIONAR MEJOR MODELO
-
-
 mejor_modelo_nombre = resultados_df.sort_values(
     by=["AUC-PR", "Recall"],
     ascending=False
@@ -200,10 +176,7 @@ mejor_modelo_nombre = resultados_df.sort_values(
 print("\nMEJOR MODELO SELECCIONADO:")
 print(mejor_modelo_nombre)
 
-
 # 10. ENTRENAR MEJOR MODELO CON TODO TRAIN
-
-
 mejor_pipeline = Pipeline([
     ("prep", preprocessor),
     ("clf", modelos[mejor_modelo_nombre])
@@ -218,10 +191,7 @@ else:
 
 print("\nMEJOR MODELO ENTRENADO CON TODO TRAIN")
 
-
 # 11. GUARDAR RESULTADOS Y MODELO
-
-
 os.makedirs("outputs/modelos", exist_ok=True)
 os.makedirs("outputs/metricas", exist_ok=True)
 
