@@ -4,7 +4,7 @@ __pycache__/
 
 outputs/modelos/
 outputs/metricas/
-outputs/graficos/
 .ipynb_checkpoints/
 
 .DS_Store
+AGENTS.md
